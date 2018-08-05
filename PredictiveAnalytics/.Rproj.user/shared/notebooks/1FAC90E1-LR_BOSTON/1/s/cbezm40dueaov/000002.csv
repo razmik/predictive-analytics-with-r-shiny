@@ -1,0 +1,1 @@
+"0","pairs(~ mvalue + lstat + pt + tax + indus + crim + rooms, data = boston_dataset, main = ""Boston Housing Attribute correlation"")"

@@ -1,0 +1,4 @@
+"0","res <- residuals(model)"
+"0","# Convert residuals to a DataFrame "
+"0","res <- as.data.frame(res)"
+"0","ggplot(res,aes(res)) +  geom_histogram(fill='blue',alpha=0.5)"

@@ -1,0 +1,7 @@
+"0","error <- test$mvalue-test$predicted.mvalue"
+"0","rmse <- sqrt(mean(error)^2)"
+"0","print(paste(""Root Mean Square Error: "", rmse))"
+"1","[1]"
+"1"," ""Root Mean Square Error:  0.548979020796244"""
+"1","
+"

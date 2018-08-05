@@ -1,0 +1,4 @@
+"0","set.seed(2)"
+"0","split <- sample.split(boston_dataset,SplitRatio =0.75)"
+"0","train <- subset(boston_dataset,split==TRUE)"
+"0","test <- subset(boston_dataset,split==FALSE)"

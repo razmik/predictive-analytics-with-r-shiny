@@ -1,0 +1,192 @@
+---
+title: "Predictive Analytics with Regression Models - Using R"
+author: "Rashmika Nawaratne"
+date: "July 26, 2018"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### Pre-requisists
+Install following libraries from the R console.  
+install.packages('Amelia')  
+install.packages('corrplot')  
+install.packages('ggplot2')  
+install.packages('caTools')  
+install.packages('dplyr')  
+install.packages('plotly')  
+
+Load required packages
+```{r}
+library(Amelia)
+library(ggplot2)
+library(corrplot)
+library(caTools)
+library(dplyr)
+library(plotly)
+```
+
+
+##Step 1: Purpose
+
+The purpose of our data mining experiment is to predict the value of homes in Boston.
+
+##Step 2: Obtain the data
+
+We will use the Boston Housing dataset, which was collected by the U.S Census Service concerning housing in the area of Boston Mass. The dataset contains a total of 506 cases and 14 attributes. For the experiment we have developed a compact version of the dataset with 13 attributes.
+```{r}
+boston_dataset = read.csv(file="BostonHousingReduced.csv", header=TRUE, sep=",")
+```
+
+##Step 3: Explore, clean and preprocess the data
+
+###Initial Look at the dataset.
+```{r}
+head(boston_dataset)
+```
+
+
+###Attributes name and description.
+CRIM - per capita crime rate by town  
+ZN - proportion of residential land zoned for lots over 25,000 sq.ft.  
+INDUS - proportion of non-retail business acres per town.  
+CHAS - Charles River dummy variable (1 if tract bounds river; 0 otherwise)  
+NOX - nitric oxides concentration (parts per 10 million)  
+ROOMS - average number of rooms per dwelling  
+AGE - proportion of owner-occupied units built prior to 1940  
+DISTANCE - weighted distances to five Boston employment centres  
+RADIAL - index of accessibility to radial highways  
+TAX - full-value property-tax rate per $10,000  
+PTRATIO - pupil-teacher ratio by town  
+LSTAT - % lower status of the population  
+MVALUE - Median value of owner-occupied homes in $1000's  
+
+###Summary
+Examine the summary of the dataset
+```{r}
+summary(boston_dataset)
+```
+
+###Check for any NA's in the dataframe.
+Next we have to clean this data. We will be using missmap() from Amelia package.
+```{r}
+missmap(boston_dataset,col=c('yellow','blue'),y.at=1,y.labels='',legend=TRUE)
+```
+
+The above plot clearly shows that the data is free from NA's.
+
+###Correlation and CorrPlots
+Explore the correlation between different attributes in the dataset.
+```{r}
+corrplot(cor(boston_dataset))
+```
+
+Analyzing the mvalue column/row, we can see, there is a high correlation with respect to lstat, pt, tax, rooms, indus, crim
+
+###Analyse pairwise correlation for selected attributes
+
+```{r}
+pairs(~ mvalue + lstat + pt + tax + indus + crim + rooms, data = boston_dataset, main = "Boston Housing Attribute correlation")
+```
+
+
+###Visualize individual distributions of above attributes (Histogram and Density)
+```{r}
+hist(boston_dataset$mvalue)
+plot(density(boston_dataset$mvalue))
+```
+
+
+##Step 4: Reduce Data Dimensions
+
+Based on the explarotary analysis conducted in Step 3, it is clear that lstat, pt, tax, rooms, indus, crim attributes has high correlation with the target value (mvalue)
+
+##Step 5: Determine the data minight task
+
+Task: Predict the value of total median value of homes.
+
+##Step 6: Partition the data
+
+1. set a seed  
+2. Split the data , `split()` assigns a booleans to a new column based on the SplitRatio specified
+
+```{r}
+set.seed(2)
+split <- sample.split(boston_dataset,SplitRatio =0.75)
+train <- subset(boston_dataset,split==TRUE)
+test <- subset(boston_dataset,split==FALSE)
+```
+
+##Step 7: Choose the technique
+
+We will chose Linear Regression as the technique for predictive modeling
+
+##Step 8: Train the predictive model
+
+```{r}
+model <- lm(mvalue ~ lstat + pt + tax + rooms + indus + crim, data = train)
+summary(model)
+```
+
+###Visualize the trained model.
+Lets visualize our linear regression model by plotting the residuals. The difference between the observed value of the dependent variable (y) and the predicted value (y) is called the residual (e).
+```{r}
+res <- residuals(model)
+
+# Convert residuals to a DataFrame 
+res <- as.data.frame(res)
+
+ggplot(res,aes(res)) +  geom_histogram(fill='blue',alpha=0.5)
+```
+
+```{r}
+plot(model)
+```
+
+##Step 9: Make Predictions
+
+Let's test our model by predicting on our testing dataset.
+
+```{r}
+test$predicted.mvalue <- predict(model,test)
+
+print(aes(mvalue,predicted.mvalue))
+
+
+```
+
+```{r}
+pl1 <-test %>% 
+  ggplot(aes(mvalue,predicted.mvalue)) +
+  geom_point(alpha=0.5) + 
+  stat_smooth(aes(colour='black')) +
+  xlab('Actual value of mvalue') +
+  ylab('Predicted value of mvalue')+
+  theme_bw()
+
+ggplotly(pl1)
+```
+
+
+###Model assessment
+Lets evaluate our model using Root Mean Square Error, a standardized measure of how off we were with our predicted values.
+```{r}
+error <- test$mvalue-test$predicted.mvalue
+rmse <- sqrt(mean(error)^2)
+
+print(paste("Root Mean Square Error: ", rmse))
+```
+
+
+##Quick Recap
+Follows a set of questions to summarize your understanding of Linear Regression.  
+  
+Q1: Why should the data be partitioned into training and testing? What will the two partitioned datasets will be used for?  
+  
+Q2: Consider the 12 predictors. Which predictors are likely to be measuring the same thing amoung the entire set of predictors?  
+With that, discuss the relationships among variables - indus, nox and tax.  
+
+Q3: Identify the highly correlated pairs of variables in 12 predictors. Based on your findings, what variables can be removed in order to overcome the redundancy (dimensionality reduction)?  

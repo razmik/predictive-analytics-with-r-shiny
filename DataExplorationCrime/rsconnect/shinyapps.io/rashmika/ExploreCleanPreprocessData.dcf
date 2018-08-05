@@ -1,0 +1,12 @@
+name: ExploreCleanPreprocessData
+title: ExploreCleanPreprocessData
+username:
+account: rashmika
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 395290
+bundleId: 1519022
+url: https://rashmika.shinyapps.io/ExploreCleanPreprocessData/
+when: 1533465714.0882
+asMultiple: FALSE
+asStatic: FALSE

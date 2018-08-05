@@ -1,0 +1,8 @@
+"0","test$predicted.mvalue <- predict(model,test)"
+"0","print(aes(mvalue,predicted.mvalue))"
+"1","Aesthetic mapping: 
+"
+"1","* `x` -> `mvalue`
+"
+"1","* `y` -> `predicted.mvalue`
+"

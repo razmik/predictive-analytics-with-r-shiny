@@ -1,0 +1,12 @@
+name: PredictiveAnalytics
+title: PredictiveAnalytics
+username:
+account: rashmika
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 394166
+bundleId: 1516100
+url: https://rashmika.shinyapps.io/PredictiveAnalytics/
+when: 1533281195.53722
+asMultiple: FALSE
+asStatic: FALSE
