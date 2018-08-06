@@ -39,9 +39,11 @@ ui <- fluidPage(theme = shinytheme("yeti"),
   titlePanel('', windowTitle ='Explore, clean, and pre-process the data'),
   
   fluidRow(
-    column(12, p("This visualization tool can be used for data exploration and predictive analytics on the Communities 
+    column(12, HTML("<p>This visualization tool can be used for data exploration and predictive analytics on the Communities 
     and Crime Unnormalized Data Set. The main purpose of this activity is to explore, clean, and pre-process 
-                 the data for Predictive Analytics task."))
+                 the data for Predictive Analytics task. More information about the dataset and its attributes can be 
+                 found through <a href='http://archive.ics.uci.edu/ml/datasets/communities+and+crime' target='_blank'>
+                 UCI Machine Learning Repository URL</a>.</p>"))
   ),
   
   hr(),
